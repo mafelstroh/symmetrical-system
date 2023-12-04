@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Application</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">CRUD Operations</h1>
+            <div id="form">
+                <!-- Form for Create operation -->
+                <div class="field">
+                    <label class="label">Item Name</label>
+                    <div class="control">
+                        <input class="input" type="text" id="itemName" placeholder="Enter item name">
+                    </div>
+                </div>
+                <div class="field">
+                    <button class="button is-primary" onclick="createItem()">Create Item</button>
+                </div>
+                <!-- Form for Update operation -->
+                <div class="field">
+                    <label class="label">Update Item</label>
+                    <input class="input" type="text" id="updateItemId" placeholder="Enter item ID">
+                    <input class="input" type="text" id="updateItemName" placeholder="New item name">
+                    <button class="button is-info" onclick="updateItem()">Update Item</button>
+                </div>
+                <!-- Form for Delete operation -->
+                <div class="field">
+                    <label class="label">Delete Item</label>
+                    <input class="input" type="text" id="deleteItemId" placeholder="Enter item ID">
+                    <button class="button is-danger" onclick="deleteItem()">Delete Item</button>
+                </div>
+            </div>
+            <div id="itemsList">
+                <!-- List of items will be displayed here -->
+            </div>
+        </div>
+    </section>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
