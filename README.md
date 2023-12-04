@@ -12,6 +12,9 @@
 
 This project is a multifaceted Node.js application designed to demonstrate a variety of web technologies for a technical assessment by Now Optics. It features a real-time chat application, a split-view interface for two users to communicate, and a WebRTC-based video calling feature. The project has been crafted with both functionality and educational demonstration in mind. While some aspects of the application are rudimentary and primarily serve to showcase the capabilities of the technologies used, they fully comply with the assessment requirements.
 
+## Demo video
+https://www.loom.com/share/98f6588860eb4f04b3e077bd5cc6a456?sid=13bec3b4-0bde-4e63-96dd-3e6d2f462347
+
 ## Key Features
 
 - **Real-Time Chat:** Utilizes WebSockets for live, bidirectional communication between clients.
