@@ -10,13 +10,13 @@
 <body>
     <section class="section">
         <div class="container">
-            <h1 class="title">CRUD Operations</h1>
+            <h1 class="title">Now Optics - Senior PHP Developer Test. CRUD Operations</h1>
             <div id="form">
                 <!-- Form for Create operation -->
                 <div class="field">
-                    <label class="label">Item Name</label>
+                    <label class="label">Message</label>
                     <div class="control">
-                        <input class="input" type="text" id="itemName" placeholder="Enter item name">
+                        <input class="input" type="text" id="itemName" placeholder="Enter message">
                     </div>
                 </div>
                 <div class="field">
@@ -24,20 +24,90 @@
                 </div>
                 <!-- Form for Update operation -->
                 <div class="field">
-                    <label class="label">Update Item</label>
-                    <input class="input" type="text" id="updateItemId" placeholder="Enter item ID">
-                    <input class="input" type="text" id="updateItemName" placeholder="New item name">
+                    <label class="label">Update Message</label>
+                    <input class="input" type="text" id="updateItemId" placeholder="Enter message ID">
+                    <input class="input" type="text" id="updateItemName" placeholder="New message">
                     <button class="button is-info" onclick="updateItem()">Update Item</button>
                 </div>
                 <!-- Form for Delete operation -->
                 <div class="field">
                     <label class="label">Delete Item</label>
                     <input class="input" type="text" id="deleteItemId" placeholder="Enter item ID">
-                    <button class="button is-danger" onclick="deleteItem()">Delete Item</button>
+                    <button class="button is-danger" onclick="manualDeleteItem()">Delete Item</button>
                 </div>
             </div>
-            <div id="itemsList">
-                <!-- List of items will be displayed here -->
+            <div id="itemsList" class="section">
+                <h2 class="title is-4">Items Message</h2>
+                <table class="table is-striped is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Actions</th> <!-- Aca colocaremos botones para cada accion segun el tiempo, para mejoras -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Espacio dinamico para mostrar los mensajes o records -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Chat Section -->
+        <div class="columns">
+            <!-- User 1 Column -->
+            <div class="column is-one-third" id="user1">
+                <h2 class="title is-4">User 1</h2>
+                <input type="text" class="input" placeholder="Enter message" id="user1Input">
+                <button class="button is-link" onclick="sendMessage('user1')">Send</button>
+            </div>
+
+            <!-- Central Chat Window -->
+            <div class="column" id="chatWindow">
+                <h2 class="title is-4">Chat History</h2>
+                <div class="chat-history" style="height: 300px; overflow-y: scroll;"></div>
+            </div>
+
+            <!-- User 2 Column -->
+            <div class="column is-one-third" id="user2">
+                <h2 class="title is-4">User 2</h2>
+                <input type="text" class="input" placeholder="Enter message" id="user2Input">
+                <button class="button is-link" onclick="sendMessage('user2')">Send</button>
+            </div>
+        </div>
+
+        <!-- Video Call Section -->
+        <div class="section">
+            <h2 class="title is-4">Video Call</h2>
+            <div class="columns">
+                <div class="column is-half">
+                    <div class="card">
+                        <div class="card-image">
+                            <figure class="image is-4by3">
+                                <video id="localVideo" autoplay muted></video>
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <p class="subtitle">Local Stream</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <div class="card">
+                        <div class="card-image">
+                            <figure class="image is-4by3">
+                                <video id="remoteVideo" autoplay></video>
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <p class="subtitle">Remote Stream</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons is-centered">
+                <button id="startCall" class="button is-success">Start Call</button>
+                <button id="endCall" class="button is-danger">End Call</button>
             </div>
         </div>
     </section>
