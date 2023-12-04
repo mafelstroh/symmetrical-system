@@ -6,17 +6,14 @@ function fetchItems() {
     fetch('/items')
     .then(response => response.json())
     .then(items => {
-        const listElement = document.querySelector('#itemsList .list');
-        listElement.innerHTML = ''; // Clear existing items
+        const tableBody = document.querySelector('#itemsList table tbody');
+        tableBody.innerHTML = '';
         items.forEach(item => {
-            const itemElement = document.createElement('div');
-            itemElement.className = 'list-item';
-            itemElement.textContent = `Item ID: ${item.id}, Name: ${item.name}`;
-            listElement.appendChild(itemElement);
+            addItemToList(item);
         });
     })
     .catch(error => {
-        console.error('Error:', error);
+        console.error('Error fetching items:', error);
     });
 }
 
@@ -95,32 +92,60 @@ socket.on('updateUI', data => {
     }
 });
 
-function addItemToList(item) {
-    const listElement = document.querySelector('#itemsList .list');
-    const itemElement = document.createElement('div');
-    itemElement.className = 'list-item';
-    itemElement.textContent = `Item ID: ${item.id}, Name: ${item.name}`;
-    listElement.appendChild(itemElement);
+function manualDeleteItem() {
+    const itemId = document.getElementById('deleteItemId').value;
+    deleteItem(itemId);
 }
 
+// Updated deleteItem function
+function deleteItem(itemId) {
+    fetch(`/delete/${itemId}`, {
+        method: 'DELETE',
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Delete Success:', data);
+        removeItemFromList(itemId);
+        socket.emit('itemDeleted', itemId);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+function addItemToList(item) {
+    const tableBody = document.querySelector('#itemsList table tbody');
+    const row = document.createElement('tr');
+    row.innerHTML = `
+        <td>${item.id}</td>
+        <td>${item.name}</td>
+        <td>
+            <button class="button is-small is-danger" onclick="deleteItem(${item.id})">Delete</button>
+        </td>`;
+    tableBody.appendChild(row);
+}
+
+
 function updateItemInList(item) {
-    const listElement = document.querySelector('#itemsList .list');
-    const itemElements = listElement.getElementsByClassName('list-item');
-    for (let elem of itemElements) {
-        if (elem.textContent.includes(`Item ID: ${item.id}`)) {
-            elem.textContent = `Item ID: ${item.id}, Name: ${item.name}`;
-            break;
+    const tableBody = document.querySelector('#itemsList table tbody');
+    [...tableBody.rows].forEach(row => {
+        if (row.cells[0].textContent == item.id) {
+            row.cells[1].textContent = item.name;
         }
-    }
+    });
 }
 
 function removeItemFromList(itemId) {
-    const listElement = document.querySelector('#itemsList .list');
-    const itemElements = listElement.getElementsByClassName('list-item');
-    for (let elem of itemElements) {
-        if (elem.textContent.includes(`Item ID: ${itemId}`)) {
-            listElement.removeChild(elem);
-            break;
+    const tableBody = document.querySelector('#itemsList table tbody');
+    [...tableBody.rows].forEach(row => {
+        if (row.cells[0].textContent == itemId) {
+            tableBody.removeChild(row);
         }
-    }
+    });
 }
+
+// Finalmente para que cuando cargue la pagina se liste todo de una
+// medio rudimentario pero cumple con todo
+document.addEventListener('DOMContentLoaded', () => {
+    fetchItems();
+});
