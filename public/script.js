@@ -1,6 +1,26 @@
 const socket = io();
 
-// Function to create an item
+
+// Initial method to fetch all the messages
+function fetchItems() {
+    fetch('/items')
+    .then(response => response.json())
+    .then(items => {
+        const listElement = document.querySelector('#itemsList .list');
+        listElement.innerHTML = ''; // Clear existing items
+        items.forEach(item => {
+            const itemElement = document.createElement('div');
+            itemElement.className = 'list-item';
+            itemElement.textContent = `Item ID: ${item.id}, Name: ${item.name}`;
+            listElement.appendChild(itemElement);
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+// Function to create a message
 function createItem() {
     const itemName = document.getElementById('itemName').value;
     fetch('/create', {
@@ -20,7 +40,7 @@ function createItem() {
     });
 }
 
-// Function to update an item
+// Function to update a message
 function updateItem() {
     const itemId = document.getElementById('updateItemId').value;
     const itemName = document.getElementById('updateItemName').value;
@@ -41,7 +61,7 @@ function updateItem() {
     });
 }
 
-// Function to delete an item
+// Function to delete a message
 function deleteItem() {
     const itemId = document.getElementById('deleteItemId').value;
     fetch(`/delete/${itemId}`, {
@@ -57,8 +77,50 @@ function deleteItem() {
     });
 }
 
-// WebSocket event listeners
+// WebSocket event listeners para actualizar la UI despues de cada operacion
+// manuel.stroh: @todo: create validation final
 socket.on('updateUI', data => {
-    // Update the UI based on the data received
-    // This will depend on how you want to display the items
+    switch (data.action) {
+        case 'create':
+            addItemToList(data);
+            break;
+        case 'update':
+            updateItemInList(data);
+            break;
+        case 'delete':
+            removeItemFromList(data.id);
+            break;
+        default:
+            console.log('Unknown action');
+    }
 });
+
+function addItemToList(item) {
+    const listElement = document.querySelector('#itemsList .list');
+    const itemElement = document.createElement('div');
+    itemElement.className = 'list-item';
+    itemElement.textContent = `Item ID: ${item.id}, Name: ${item.name}`;
+    listElement.appendChild(itemElement);
+}
+
+function updateItemInList(item) {
+    const listElement = document.querySelector('#itemsList .list');
+    const itemElements = listElement.getElementsByClassName('list-item');
+    for (let elem of itemElements) {
+        if (elem.textContent.includes(`Item ID: ${item.id}`)) {
+            elem.textContent = `Item ID: ${item.id}, Name: ${item.name}`;
+            break;
+        }
+    }
+}
+
+function removeItemFromList(itemId) {
+    const listElement = document.querySelector('#itemsList .list');
+    const itemElements = listElement.getElementsByClassName('list-item');
+    for (let elem of itemElements) {
+        if (elem.textContent.includes(`Item ID: ${itemId}`)) {
+            listElement.removeChild(elem);
+            break;
+        }
+    }
+}

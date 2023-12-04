@@ -14,9 +14,9 @@
             <div id="form">
                 <!-- Form for Create operation -->
                 <div class="field">
-                    <label class="label">Item Name</label>
+                    <label class="label">Message</label>
                     <div class="control">
-                        <input class="input" type="text" id="itemName" placeholder="Enter item name">
+                        <input class="input" type="text" id="itemName" placeholder="Enter message">
                     </div>
                 </div>
                 <div class="field">
@@ -24,20 +24,23 @@
                 </div>
                 <!-- Form for Update operation -->
                 <div class="field">
-                    <label class="label">Update Item</label>
-                    <input class="input" type="text" id="updateItemId" placeholder="Enter item ID">
-                    <input class="input" type="text" id="updateItemName" placeholder="New item name">
+                    <label class="label">Update Message</label>
+                    <input class="input" type="text" id="updateItemId" placeholder="Enter message ID">
+                    <input class="input" type="text" id="updateItemName" placeholder="New message">
                     <button class="button is-info" onclick="updateItem()">Update Item</button>
                 </div>
                 <!-- Form for Delete operation -->
                 <div class="field">
-                    <label class="label">Delete Item</label>
-                    <input class="input" type="text" id="deleteItemId" placeholder="Enter item ID">
+                    <label class="label">Delete Message</label>
+                    <input class="input" type="text" id="deleteItemId" placeholder="Enter message ID">
                     <button class="button is-danger" onclick="deleteItem()">Delete Item</button>
                 </div>
             </div>
-            <div id="itemsList">
-                <!-- List of items will be displayed here -->
+            <div id="itemsList" class="section">
+                <h2 class="title is-4">Message List</h2>
+                <div class="list">
+                    <!-- Items will be listed here -->
+                </div>
             </div>
         </div>
     </section>

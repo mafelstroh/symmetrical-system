@@ -29,6 +29,8 @@ server.listen(3000, () => {
 // Code to handle my CREATE READ UPDATE DELETE operations
 
 // Create operation
+
+// List all items (messages)
 app.post('/create', (req, res) => {
     const { name } = req.body;
     db.run('INSERT INTO items (name) VALUES (?)', [name], function(err) {
@@ -41,7 +43,7 @@ app.post('/create', (req, res) => {
     });
 });
 
-// Read operation (optional, if you want to display all items)
+// Read operation (to List all the messages)
 app.get('/items', (req, res) => {
     db.all('SELECT * FROM items', [], (err, rows) => {
         if (err) {
