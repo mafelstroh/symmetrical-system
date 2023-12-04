@@ -7,8 +7,19 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
+const fs = require('fs');
+
 app.use(express.static('public'));
 app.use(express.json());
+
+// Configuracion para WebRTC
+let webrtcConfig;
+try {
+    const configFile = fs.readFileSync('webrtcConfig.json', 'utf8');
+    webrtcConfig = JSON.parse(configFile);
+} catch (error) {
+    console.error('Error reading WebRTC config file:', error);
+}
 
 // Database setup
 const db = new sqlite3.Database('database.db', (err) => {
@@ -20,6 +31,9 @@ db.serialize(() => {
     db.run('CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY, name TEXT)');
 });
 
+// mstroh: and another for "real messages" to simulate a chat
+db.run('CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY, user TEXT, message TEXT)');
+
 // Start listening
 server.listen(3000, () => {
     console.log('Server listening on port 3000');
@@ -27,9 +41,7 @@ server.listen(3000, () => {
 
 
 // Code to handle my CREATE READ UPDATE DELETE operations
-
 // Create operation
-
 // List all items (messages)
 app.post('/create', (req, res) => {
     const { name } = req.body;
@@ -80,13 +92,48 @@ app.delete('/delete/:id', (req, res) => {
     });
 });
 
+// Endpoint para los mensajes
+app.get('/messages', (req, res) => {
+    db.all('SELECT * FROM messages', [], (err, rows) => {
+        if (err) {
+            res.status(500).send(err.message);
+            return;
+        }
+        res.status(200).json(rows);
+    });
+});
+
 // WebSocket event listeners
 io.on('connection', (socket) => {
-    // Add listeners for CRUD operations
-    // ...
+    socket.on('newMessage', (data) => {
+        db.run('INSERT INTO messages (user, message) VALUES (?, ?)', [data.user, data.message], function(err) {
+            if (err) {
+                console.error('Database error:', err.message);
+                return;
+            }
+            io.emit('updateChat', { user: data.user, message: data.message });
+        });
+    });
+
+    socket.on('webrtc-offer', (data) => {
+        socket.broadcast.emit('webrtc-offer', data);
+    });
+
+    socket.on('webrtc-answer', (data) => {
+        socket.broadcast.emit('webrtc-answer', data);
+    });
+
+    socket.on('webrtc-ice-candidate', (data) => {
+
+        socket.broadcast.emit('webrtc-ice-candidate', data);
+    });
 
     socket.on('disconnect', () => {
         console.log('User disconnected');
     });
 });
 
+// Finalmente endopoint para Web RTC
+app.get('/webrtc-config', (req, res) => {
+    res.json(webrtcConfig);
+});

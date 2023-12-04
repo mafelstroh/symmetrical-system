@@ -1,0 +1,40 @@
+.chat-history {
+    border: 1px solid #dbdbdb;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+}
+
+.message {
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 4px;
+    background-color: #e4e4e4;
+}
+
+.message.user1 {
+    background-color: #d3e5ff; 
+}
+
+.message.user2 {
+    background-color: #fde4d0;
+}
+
+video {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.card {
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s;
+}
+
+.card:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.buttons.is-centered button {
+    width: 150px;
+}
